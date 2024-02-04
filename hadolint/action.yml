@@ -1,0 +1,25 @@
+name: 'Hadolint Action'
+description: 'Action that runs Hadolint Dockerfile linting tool'
+inputs:
+  docker_file:
+    description: "Name of the dockerfile"
+    required: true
+    default: Dockerfile
+  recursive_enabled:
+    description:
+      'Search for specified dockerfile recursively, from the project root'
+    required: true
+  config_file:
+    description: "Custom path to a Hadolint config file"
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Hadolint
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: ${{ inputs.docker_file }}
+        recursive: ${{ inputs.recursive_enabled }}
+        config: ${{ inputs.config_file }}
+        
