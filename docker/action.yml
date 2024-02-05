@@ -49,7 +49,14 @@ runs:
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && success() }}
       shell: bash
       run: |
-        docker push '${{ inputs.dockerhub_username }}/${{ inputs.image_name }}:${{ inputs.tags }}'    
+        docker push '${{ inputs.dockerhub_username }}/${{ inputs.image_name }}:${{ inputs.tags }}' 
+
+    - name: New tag commit to main branch
+      if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+      shell: bash
+      run: |
+        docker tag '${{ inputs.dockerhub_username }}/${{ inputs.image_name }}:${{ inputs.tags }}' '${{ inputs.dockerhub_username }}/${{ inputs.image_name }}:${{ github.ref_name }}'
+        docker push '${{ inputs.dockerhub_username }}/${{ inputs.image_name }}:${{ github.ref_name }}'
 
         
         
